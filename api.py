@@ -13,6 +13,12 @@ class PlaytomicClient:
     BASE_URL = "https://api.playtomic.io"
 
     def __init__(self, email: str, password: str) -> None:
+        """
+        Initialize the Playtomic client with authentication.
+
+        :param str email: The email of the user.
+        :param str password: The password of the user.
+        """
         self.email = email
         self.password = password
         self.session = requests.Session()
@@ -21,7 +27,12 @@ class PlaytomicClient:
         self._authenticate()
 
     def _authenticate(self) -> None:
-        """Authenticate the user and retrieve access tokens."""
+        """
+        Authenticate the user and retrieve access tokens.
+
+        This method authenticates the user by sending a POST request with the provided email and password. 
+        It stores the access token and refresh token for further requests.
+        """
         logger.debug("Authenticating user.")
         auth_url = f"{self.BASE_URL}/v3/auth/login"
         payload = {"email": self.email, "password": self.password}
@@ -34,11 +45,14 @@ class PlaytomicClient:
         logger.info("User authenticated successfully.")
 
     def _get_headers(self) -> Dict[str, str]:
-        """Return headers with the authorization token."""
+        """
+        Return headers with the authorization token.
+
+        :returns: The authorization headers as a dictionary.
+        :rtype: dict
+        """
         if not self.access_token:
-            return {
-                "Content-Type": "application/json"
-            }
+            raise Exception("Authentication token is missing")
         return {
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json"
@@ -46,7 +60,19 @@ class PlaytomicClient:
 
     def _send_http_request(self, url: str, method: str, json: Optional[Dict] = None, data: Optional[Dict] = None,
                            params: Optional[Dict] = None, headers: Optional[Dict] = None) -> requests.Response:
-        """Send HTTP request to Playtomic server with error handling and logging."""
+        """
+        Send HTTP request to the Playtomic server.
+
+        :param str url: The URL for the HTTP request.
+        :param str method: The HTTP request method (GET, POST, etc.).
+        :param dict json: (optional) The JSON payload for the request.
+        :param dict data: (optional) The form data for the request.
+        :param dict params: (optional) The query parameters for the request.
+        :param dict headers: (optional) The HTTP headers for the request.
+
+        :returns: The instance of :class:`Response <requests.Response>`.
+        :rtype: requests.Response
+        """
         logger.debug(f"Sending {method} request to {url}")
         try:
             response = self.session.request(method=method, url=url, json=json, data=data, params=params, headers=headers)
@@ -59,7 +85,16 @@ class PlaytomicClient:
         return response
 
     def send_request(self, method: str, endpoint: str, payload: Optional[Dict] = None) -> Dict:
-        """Send HTTP request to Playtomic server, with automatic token refresh if needed."""
+        """
+        Send HTTP request to Playtomic server, with automatic token refresh if needed.
+
+        :param str method: The HTTP request method (GET, POST, etc.).
+        :param str endpoint: The API endpoint to call.
+        :param dict payload: (optional) The JSON payload for the request.
+
+        :returns: The JSON response from the API.
+        :rtype: dict
+        """
         url = f"{self.BASE_URL}{endpoint}"
         headers = self._get_headers()
 
@@ -78,7 +113,11 @@ class PlaytomicClient:
         return response.json()
 
     def _refresh_access_token(self) -> None:
-        """Refresh the authentication token if expired."""
+        """
+        Refresh the authentication token if expired.
+
+        :raises: :class:`requests.HTTPError` if the refresh fails.
+        """
         logger.debug("Refreshing access token.")
         refresh_url = f"{self.BASE_URL}/v3/auth/refresh"
         payload = {"refresh_token": self.refresh_token}
@@ -90,23 +129,50 @@ class PlaytomicClient:
         self.refresh_token = data.get("refresh_token")
         logger.info("Access token refreshed successfully.")
 
-    # Tournament and Tenant operations
     def get_tournament(self, tournament_id: str) -> Dict:
-        """Get tournament data."""
+        """
+        Get tournament data from Playtomic server.
+
+        :param str tournament_id: The ID of the tournament to fetch.
+
+        :returns: The tournament data as a dictionary.
+        :rtype: dict
+        """
         tournament = Tournament(client=self)
         return tournament.get(tournament_id)
 
     def create_tournament(self, tournament_data: Dict) -> Dict:
-        """Create a new tournament."""
+        """
+        Create a new tournament on the Playtomic server.
+
+        :param dict tournament_data: The tournament data to create.
+
+        :returns: The created tournament data as a dictionary.
+        :rtype: dict
+        """
         tournament = Tournament(client=self)
         return tournament.create(tournament_data)
 
     def get_tenant(self, tenant_id: str) -> Dict:
-        """Get tenant information."""
+        """
+        Get tenant information from Playtomic server.
+
+        :param str tenant_id: The ID of the tenant to fetch.
+
+        :returns: The tenant data as a dictionary.
+        :rtype: dict
+        """
         tenant = Tenant(client=self)
         return tenant.get(tenant_id)
 
     def create_tenant(self, tenant_data: Dict) -> Dict:
-        """Create a new tenant."""
+        """
+        Create a new tenant on the Playtomic server.
+
+        :param dict tenant_data: The tenant data to create.
+
+        :returns: The created tenant data as a dictionary.
+        :rtype: dict
+        """
         tenant = Tenant(client=self)
         return tenant.create(tenant_data)
