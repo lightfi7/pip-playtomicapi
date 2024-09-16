@@ -43,7 +43,9 @@ To fetch details about a tenant, use the `get_tenant` method. You need to provid
 
 ```python
 tenant_id = "your_tenant_id"
-tenant_info = client.get_tenant(tenant_id)
+Tenant = TenantEndpoint(client)
+
+tenant_info = Tenant.get(tenant_id)
 print("Tenant Info:", tenant_info)
 ```
 
@@ -52,13 +54,16 @@ print("Tenant Info:", tenant_info)
 You can create a tournament by passing the tournament data to the `create_tournament` method.
 
 ```python
+Tournament = TournamentEndpoint(client)
+
+# Create a new tournament
 tournament_data = {
-    "name": "Sample Tournament",
+    "name": "New Tournament",
     "start_date": "2024-09-13T23:00:00Z",
     "end_date": "2024-09-14T00:00:00Z"
 }
 
-new_tournament = client.create_tournament(tournament_data)
+new_tournament = Tournament.create(tournament_data)
 print("Created Tournament:", new_tournament)
 ```
 
@@ -69,7 +74,7 @@ The `PlaytomicClient` automatically handles token expiration. If the access toke
 ### Example Code:
 
 ```python
-from playtomicapi.api import PlaytomicClient
+from playtomicapi.api import PlaytomicClient, TournamentEndpoint
 
 # Initialize the Playtomic client with credentials
 client = PlaytomicClient(email="user@example.com", password="password")
@@ -79,31 +84,37 @@ tenant_id = "123456789"
 tenant_info = client.get_tenant(tenant_id)
 print(f"Tenant Info: {tenant_info}")
 
+Tournament = TournamentEndpoint(client)
+
 # Create a new tournament
 tournament_data = {
     "name": "New Tournament",
     "start_date": "2024-09-13T23:00:00Z",
     "end_date": "2024-09-14T00:00:00Z"
 }
-new_tournament = client.create_tournament(tournament_data)
+
+new_tournament = Tournament.create(tournament_data)
 print(f"Created Tournament: {new_tournament}")
 ```
 
-## Methods
+## Endpoints
 
-### `PlaytomicClient`
+### `TournamentEndpoint`
 
-#### `__init__(email: str, password: str)`
-Initializes the API client with email and password for authentication.
+#### `get(tournament_id: str) -> dict`
+Fetches details for a specific tournament by ID.
 
-#### `get_tenant(tenant_id: str) -> dict`
-Fetches details for a specific tenant by ID.
-
-#### `create_tournament(tournament_data: dict) -> dict`
+#### `create(tournament_data: dict) -> dict`
 Creates a new tournament with the provided tournament data.
 
-#### `send_request(method: str, endpoint: str, payload: Optional[Dict] = None) -> dict`
-Sends a custom request to the Playtomic API. You can specify the HTTP method (GET, POST, etc.), endpoint, and an optional payload for POST requests.
+### `TenantEndpoint`
+
+#### `get(tenant_id: str) -> dict`
+Fetches details for a specific tenant by ID.
+
+#### `create(tenant_data: dict) -> dict`
+Creates a new tournament with the provided tenant data.
+
 
 ## Logging
 
@@ -120,7 +131,7 @@ The `PlaytomicClient` raises exceptions for HTTP errors using `requests.raise_fo
 
 ```python
 try:
-    tenant_info = client.get_tenant("tenant_id")
+    tenant_info = tenant.get("tenant_id")
 except requests.HTTPError as e:
     print(f"An error occurred: {e}")
 ```

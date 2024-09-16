@@ -3,7 +3,7 @@
 import requests
 import logging
 from typing import Optional, Dict
-from endpoints import Tenant, Tournament
+from endpoints import TenantEndpoint, TournamentEndpoint
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)  # Set logging level globally
@@ -129,50 +129,3 @@ class PlaytomicClient:
         self.refresh_token = data.get("refresh_token")
         logger.info("Access token refreshed successfully.")
 
-    def get_tournament(self, tournament_id: str) -> Dict:
-        """
-        Get tournament data from Playtomic server.
-
-        :param str tournament_id: The ID of the tournament to fetch.
-
-        :returns: The tournament data as a dictionary.
-        :rtype: dict
-        """
-        tournament = Tournament(client=self)
-        return tournament.get(tournament_id)
-
-    def create_tournament(self, tournament_data: Dict) -> Dict:
-        """
-        Create a new tournament on the Playtomic server.
-
-        :param dict tournament_data: The tournament data to create.
-
-        :returns: The created tournament data as a dictionary.
-        :rtype: dict
-        """
-        tournament = Tournament(client=self)
-        return tournament.create(tournament_data)
-
-    def get_tenant(self, tenant_id: str) -> Dict:
-        """
-        Get tenant information from Playtomic server.
-
-        :param str tenant_id: The ID of the tenant to fetch.
-
-        :returns: The tenant data as a dictionary.
-        :rtype: dict
-        """
-        tenant = Tenant(client=self)
-        return tenant.get(tenant_id)
-
-    def create_tenant(self, tenant_data: Dict) -> Dict:
-        """
-        Create a new tenant on the Playtomic server.
-
-        :param dict tenant_data: The tenant data to create.
-
-        :returns: The created tenant data as a dictionary.
-        :rtype: dict
-        """
-        tenant = Tenant(client=self)
-        return tenant.create(tenant_data)

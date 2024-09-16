@@ -1,2 +1,2 @@
-from tenant import Tenant
-from tournament import Tournament
+from tenant import TenantEndpoint
+from tournament import TournamentEndpoint

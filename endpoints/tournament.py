@@ -2,7 +2,7 @@ from typing import Dict
 from ..api import PlaytomicClient
 
 
-class Tournament:
+class TournamentEndpoint:
     def __init__(self, client: PlaytomicClient) -> None:
         self.client = client
 

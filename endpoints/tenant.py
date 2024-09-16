@@ -1,7 +1,7 @@
 from ..api import PlaytomicClient
 
 
-class Tenant:
+class TenantEndpoint:
     def __init__(self, client: PlaytomicClient) -> None:
         self.client = client
 
