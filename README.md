@@ -79,7 +79,7 @@ client = PlaytomicClient(email="user@example.com", password="password")
 
 # Fetch a tenant's details
 tenant_id = "123456789"
-tenant_info = client.get_tenant(tenant_id)
+tenant_info = client.Tenant.get(tenant_id)
 print(f"Tenant Info: {tenant_info}")
 
 
