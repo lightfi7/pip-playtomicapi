@@ -75,6 +75,7 @@ The `PlaytomicClient` automatically handles token expiration. If the access toke
 
 ```python
 from playtomicapi.api import PlaytomicClient
+from playtomicapi.endpoints import TournamentEndpoint
 
 # Initialize the Playtomic client with credentials
 client = PlaytomicClient(email="user@example.com", password="password")
