@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)  # Set logging level globally
 
 
-class PlaytomicClient:
+class Client:
     BASE_URL = "https://api.playtomic.io"
 
     def __init__(self, email: str, password: str) -> None:

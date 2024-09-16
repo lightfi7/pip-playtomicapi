@@ -1,8 +1,6 @@
 """A python wrapper for Playtomic API."""
 
 import logging
-from client import PlaytomicClient
-from endpoints import TenantEndpoint, TournamentEndpoint
 
 
 def _prepare_logging():
