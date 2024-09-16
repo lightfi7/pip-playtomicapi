@@ -31,7 +31,7 @@ pip install requests
 First, you need to create an instance of the `PlaytomicClient` by providing your Playtomic credentials (email and password). This client will handle all interactions with the API.
 
 ```python
-from playtomicapi.api import PlaytomicClient
+from playtomicapi import PlaytomicClient
 
 # Initialize the client with your Playtomic credentials
 client = PlaytomicClient(email="your_email@example.com", password="your_password")
