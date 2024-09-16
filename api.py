@@ -3,7 +3,6 @@
 import requests
 import logging
 from typing import Optional, Dict
-from endpoints import TenantEndpoint, TournamentEndpoint
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)  # Set logging level globally
